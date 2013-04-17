@@ -135,6 +135,8 @@
                 {
                     if (PC.locked) return false;
 
+                    PC.update_form();
+
                     PC.locked = true;
                     $('body').removeClass('eyedrop');
                     $('#overlay').fadeIn('fast');
@@ -179,16 +181,15 @@
                     $('#hex').html(hsl);
                 },
 
-                update_canvas: function()
+                update_form: function()
                 {
                     var context = $('#canvas')[0].getContext('2d');
                     context.fillStyle = 'hsl(' + PC.h + ', ' + PC.s + '%, ' + PC.l + '%)';
                     context.fillRect(0, 0, 1280, 1280);
-                },
 
-                export_canvas: function()
-                {
-                    console.log($('#canvas')[0].toDataURL());
+                    $('#base64').val($('#canvas')[0].toDataURL());
+
+                    $('#rgb').val('asdf');
                 },
             };
 
@@ -198,7 +199,7 @@
                 PC.resize();
             });
 
-            $(window).on('click', function(e){
+            $(window).on('mouseup', function(e){
                 if ($(e.target).parents('#overlay').length !== 0) {
                     return false;
                 }
@@ -245,15 +246,15 @@
 <body class="eyedrop">
     <div id="overlay" style="display:none;">
         <div class="inner">
-        <div class="title">Is this color pretty?</div>
+            <div class="title">Is this color pretty?</div>
 
-        <form action="" method="post">
-            <input type="hidden" name="rgb" id="rgb" />
-            <input type="hidden" name="rgb" id="base64" />
+            <form action="http://localhost:5000/submit" method="post" id="form">
+                <input type="hidden" name="rgb" id="rgb" />
+                <input type="hidden" name="base64" id="base64" />
 
-            <button type="submit" id="submit">Yes, submit to Pretty Colors!</button>
-            <button type="reset" id="reset">No, try again</button>
-        </form>
+                <button type="submit" id="submit">Yes, submit to Pretty Colors!</button>
+                <button type="reset" id="reset">No, try again</button>
+            </form>
         </div>
     </div>
     <canvas id="canvas" width="1280" height="1280"></canvas>
