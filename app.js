@@ -44,7 +44,7 @@ app.get('/request_token', function(req, res) {
     });
 });
 
-app.get('/callback', function(res, req){
+app.get('/callback', function(req, res){
 
     var oa = new OAuth(
         "http://www.tumblr.com/oauth/request_token",
@@ -59,7 +59,7 @@ app.get('/callback', function(res, req){
     oa.getOAuthAccessToken(
         oauth_token, 
         oauth_token_secret,
-        req.params.oauth_verifier, 
+        req.query.oauth_verifier, 
         function(error, oauth_access_token, oauth_access_token_secret, results2) {
             if (error) {
                 console.log('error');
