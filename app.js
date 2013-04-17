@@ -85,7 +85,6 @@ app.post('/submit', function(req, res){
         data64: req.body.base64,
         caption: req.body.hex,
     }, function(err, data){
-        // res.send(err + JSON.stringify(data));
         if (err) console.log(err);
         console.log(data);
 
