@@ -101,6 +101,10 @@
             opacity: 0.25;
         }
 
+        #hex.inverted {
+            color: #000;
+        }
+
         #loader {
             position: absolute;
             top: 0;
@@ -181,6 +185,12 @@
 
                     var t = tinycolor(hsl);
                     $('#hex').html('#' + t.toHex());
+
+                    if (PC.l > 30) {
+                        $('#hex').addClass('inverted');
+                    } else {
+                        $('#hex').removeClass('inverted');
+                    }
                 },
 
                 update_form: function()
