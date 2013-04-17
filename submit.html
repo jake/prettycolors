@@ -100,6 +100,16 @@
             color: #fff;
             opacity: 0.25;
         }
+
+        #loader {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url('colorwheel.gif') center no-repeat transparent;
+            background-size: cover;
+        }
     </style>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="jquery.mousewheel.js"></script>
@@ -127,7 +137,7 @@
 
                     PC.locked = true;
                     $('body').removeClass('eyedrop');
-                    $('#overlay').show();
+                    $('#overlay').fadeIn('fast');
                 },
 
                 remove_lock: function()
@@ -136,7 +146,7 @@
 
                     PC.locked = false;
                     $('body').addClass('eyedrop');
-                    $('#overlay').hide();
+                    $('#overlay').fadeOut('fast');
                 },
 
                 resize: function()
@@ -225,6 +235,10 @@
             $('#reset').on('mouseup', function(){
                 PC.remove_lock();
             });
+
+            $('#submit').on('mouseup', function(){
+                $('#loader').fadeIn('fast');
+            });
         });
     </script>
 </head>
@@ -244,5 +258,6 @@
     </div>
     <canvas id="canvas" width="1280" height="1280"></canvas>
     <div id="hex"></div>
+    <div id="loader" style="display:none;"></div>
 </body>
 </html>
