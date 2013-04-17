@@ -85,7 +85,7 @@ app.post('/submit', function(req, res){
         caption: req.body.rgb,
     }, function(err, data){
         // res.send(err + JSON.stringify(data));
-        console.log(err);
+        if (err) console.log(err);
         console.log(data);
 
         res.redirect('http://prettycolors.tumblr.com/');
