@@ -78,10 +78,19 @@ app.get('/callback', function(req, res){
 */
 
 app.post('/submit', function(req, res){
-    console.log(req.body);
+    client.photo('testpubgroup5', {
+        state: 'queue',
+        tags: 'prettycolors',
+        data64: req.body.base64,
+        caption: req.body.rgb,
+    }, function(err, data){
+        // res.send(err + JSON.stringify(data));
+        console.log(err);
+        console.log(data);
 
-    res.redirect('http://prettycolors.tumblr.com/');
-    res.end();
+        res.redirect('http://prettycolors.tumblr.com/');
+        res.end();
+    });
 });
 
 app.get('/*', function(req, res){
