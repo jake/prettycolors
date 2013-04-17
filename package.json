@@ -6,7 +6,6 @@
     "dependencies": {
         "request": "2.x"
         ,"express": "3.0.x"
-        ,"tumblr.js": "0.0.4"
         // ,"oauth": "0.9.10"
     },
     "engines": {

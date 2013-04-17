@@ -1,5 +1,5 @@
 var express = require('express');
-var tumblr = require('tumblr.js');
+var tumblr = require('./lib/tumblr.js');
 
 var app = express();
 
