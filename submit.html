@@ -4,6 +4,28 @@
     <title>Submit a Pretty Color</title>
     <meta charset="UTF-8">
     <style type="text/css">
+        body {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .eyedrop {
+            cursor: url(eyedrop.png) 17 17, crosshair;
+            cursor: -webkit-image-set(
+                url('eyedrop.png') 1x,
+                url('eyedrop_2x.png') 2x
+            ), crosshair;
+        }
+
+        #canvas {
+            display: none;
+        }
+
         #hex {
             position: absolute;
             bottom: 50px;
@@ -68,8 +90,23 @@
 
                 set_color: function()
                 {
-                    $('body').css('background-color', 'hsl(' + PC.h + ', ' + PC.s + '%, ' + PC.l + '%)');
-                    $('#hex').html('hsl(' + PC.h + ', ' + PC.s + '%, ' + PC.l + '%);');
+                    var hsl = 'hsl(' + PC.h + ', ' + PC.s + '%, ' + PC.l + '%)';
+
+                    $('body').css('background-color', hsl);
+
+                    $('#hex').html(hsl);
+                },
+
+                update_canvas: function()
+                {
+                    var context = $('#canvas')[0].getContext('2d');
+                    context.fillStyle = 'hsl(' + PC.h + ', ' + PC.s + '%, ' + PC.l + '%)';
+                    context.fillRect(0, 0, 1280, 1280);
+                },
+
+                export_canvas: function()
+                {
+                    console.log($('#canvas')[0].toDataURL());
                 },
             };
 
@@ -111,7 +148,11 @@
         });
     </script>
 </head>
-<body>
+<body class="eyedrop">
+    <form action="" method="post">
+
+    </form>
+    <canvas id="canvas" width="1280" height="1280"></canvas>
     <div id="hex"></div>
 </body>
 </html>
