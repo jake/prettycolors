@@ -83,7 +83,7 @@ app.post('/submit', function(req, res){
         state: 'queue',
         tags: 'prettycolors',
         data64: req.body.base64,
-        caption: req.body.rgb,
+        caption: req.body.hex,
     }, function(err, data){
         // res.send(err + JSON.stringify(data));
         if (err) console.log(err);

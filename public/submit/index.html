@@ -113,6 +113,7 @@
     </style>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="jquery.mousewheel.js"></script>
+    <script type='text/javascript' src='jquery.tinycolor.js'></script>
     <script type="text/javascript">
         $(function() {
             PC = {
@@ -178,7 +179,8 @@
 
                     $('body').css('background-color', hsl);
 
-                    $('#hex').html(hsl);
+                    var t = tinycolor(hsl);
+                    $('#hex').html('#' + t.toHex());
                 },
 
                 update_form: function()
@@ -192,7 +194,7 @@
                     base64 = base64.length > 1 ? base64[1] : base64[0];
                     $('#base64').val(base64);
 
-                    $('#rgb').val('asdf');
+                    $('#hex_input').val($('#hex').val());
                 },
             };
 
@@ -252,7 +254,7 @@
             <div class="title">Is this color pretty?</div>
 
             <form action="/submit" method="post" id="form">
-                <input type="hidden" name="rgb" id="rgb" />
+                <input type="hidden" name="hex" id="hex_input" />
                 <input type="hidden" name="base64" id="base64" />
 
                 <button type="submit" id="submit">Yes, submit to Pretty Colors!</button>
