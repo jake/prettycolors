@@ -1,0 +1,14 @@
+{
+    "name": "pretty-colors",
+    "description": "Pretty Colors",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "request": "2.x"
+        ,"express": "3.0.x"
+    },
+    "engines": {
+        "node": "0.8.x"
+        ,"npm": "1.1.x"
+    }
+}
