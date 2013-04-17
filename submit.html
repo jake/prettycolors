@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submit a Pretty Color</title>
+    <meta charset="UTF-8">
+    <style type="text/css">
+        #hex {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font: bold 50px Menlo, 'Andale Mono', 'Courier New', sans-serif;
+            color: #fff;
+            opacity: 0.25;
+        }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            PC = {
+                locked: false,
+
+                h: parseInt(Math.random() * 360, 10),
+                s: parseInt(Math.random() * 100, 10),
+                l: 50,
+
+                width: 0,
+                height: 0,
+
+                init: function()
+                {
+                    PC.resize();
+                    PC.set_color();
+                },
+
+                set_lock: function()
+                {
+                    PC.locked = true;
+                },
+
+                remove_lock: function()
+                {
+                    PC.locked = false;
+                },
+
+                resize: function()
+                {
+                    PC.width = $(window).width();
+                    PC.height = $(window).height();
+                },
+
+                set_h: function(x)
+                {
+                    PC.h = Math.min(360, parseInt((x / PC.width) * 360, 10));
+                },
+
+                set_s: function(y)
+                {
+                    PC.s = 100 - Math.min(100, parseInt((y / PC.height) * 100, 10));
+                },
+
+                set_l: function()
+                {
+                    PC.l = 0;
+                },
+
+                set_color: function()
+                {
+                    $('body').css('background-color', 'hsl(' + PC.h + ', ' + PC.s + '%, ' + PC.l + '%)');
+                    $('#hex').html('hsl(' + PC.h + ', ' + PC.s + '%, ' + PC.l + '%);');
+                },
+            };
+
+            PC.init();
+
+            $(window).on('resize', function(){
+                PC.resize();
+            });
+
+            $(window).on('click', function(){
+                PC.set_lock();
+            });
+
+            $(window).on('mousemove', function(e){
+                if (PC.locked) return;
+
+                PC.set_h(e.pageX);
+                PC.set_s(e.pageY);
+
+                PC.set_color();
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="hex"></div>
+</body>
+</html>
