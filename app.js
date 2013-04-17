@@ -59,7 +59,7 @@ app.get('/callback', function(res, req){
     oa.getOAuthAccessToken(
         oauth_token, 
         oauth_token_secret,
-        req.param('oauth_verifier'), 
+        req.params.oauth_verifier, 
         function(error, oauth_access_token, oauth_access_token_secret, results2) {
             if (error) {
                 console.log('error');
