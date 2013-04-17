@@ -23,9 +23,7 @@ app.configure('development', function(){
 });
 
 app.get('/request_token', function(req, res) {    
-    var getRequestTokenUrl = "http://www.tumblr.com/oauth/request_token";
-    
-    var oa = new OAuth(getRequestTokenUrl,
+    var oa = new OAuth("http://www.tumblr.com/oauth/request_token",
         "http://www.tumblr.com/oauth/access_token",
         process.env.TUMBLR_API_CONSUMER_KEY,
         process.env.TUMBLR_API_CONSUMER_SECRET,
@@ -48,7 +46,8 @@ app.get('/request_token', function(req, res) {
 
 app.get('/callback', function(res, req){
 
-    var oa = new OAuth(getRequestTokenUrl,
+    var oa = new OAuth(
+        "http://www.tumblr.com/oauth/request_token",
         "http://www.tumblr.com/oauth/access_token",
         process.env.TUMBLR_API_CONSUMER_KEY,
         process.env.TUMBLR_API_CONSUMER_SECRET,
