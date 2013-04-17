@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <style type="text/css">
         #hex {
-            position: fixed;
-            bottom: 20px;
+            position: absolute;
+            bottom: 50px;
             left: 0;
             right: 0;
             text-align: center;
@@ -15,7 +15,8 @@
             opacity: 0.25;
         }
     </style>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.mousewheel.js"></script>
     <script type="text/javascript">
         $(function() {
             PC = {
@@ -60,9 +61,9 @@
                     PC.s = 100 - Math.min(100, parseInt((y / PC.height) * 100, 10));
                 },
 
-                set_l: function()
+                set_l: function(delta)
                 {
-                    PC.l = 0;
+                    PC.l = Math.max(0, Math.min(100, PC.l + parseInt(delta, 10)))
                 },
 
                 set_color: function()
@@ -80,6 +81,23 @@
 
             $(window).on('click', function(){
                 PC.set_lock();
+            });
+
+            $(window).on('mousewheel', function(e, delta){
+                e.preventDefault();
+
+                if (PC.locked) return;
+
+                PC.set_l(delta);
+
+                PC.set_color();
+            })
+
+            $(window).on('keydown', function(e){
+                if (e.keyCode == 40) PC.set_l(1);
+                if (e.keyCode == 38) PC.set_l(-1);
+
+                PC.set_color();
             });
 
             $(window).on('mousemove', function(e){
