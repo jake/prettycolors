@@ -4,6 +4,15 @@
     <title>Submit a Pretty Color</title>
     <meta charset="UTF-8">
     <style type="text/css">
+        html, body, div, span, p, a, strong, b, i, form, label, canvas {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+
         body {
             position: absolute;
             top: 0;
@@ -14,17 +23,72 @@
             padding: 0;
         }
 
-        .eyedrop {
+        .eyedrop,
+        .eyedrop > * {
             cursor: url(eyedrop.png) 17 17, crosshair;
             cursor: -webkit-image-set(
                 url('eyedrop.png') 1x,
                 url('eyedrop_2x.png') 2x
-            ), crosshair;
+            ) 17 17, crosshair;
         }
 
         #canvas {
             display: none;
         }
+
+        #overlay {
+            background: #fbfbfb;
+            border-radius: 2px;
+            box-shadow: 0 1px 5px rgba(0,0,0, 0.4);
+            width: 400px;
+            height: 200px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -150px 0 0 -200px;
+            text-align: center;
+            display: table;
+        }
+
+            #overlay .inner {
+                display: table-cell;
+                vertical-align: middle;
+            }
+
+            #overlay .title {
+                font: normal 30px "Helvetica Neue";
+                color: rgba(13,13,13, 0.8);
+                padding: 0 25px 25px 25px;
+            }
+
+            #overlay button {
+                background: #fafafa;
+                background: -webkit-linear-gradient(top, #fafafa 0%, #f4f4f4 40%, #e5e5e5 100%);
+                border: 1px solid #aaa;
+                padding: 5px 14px;
+                color: #444;
+                font-family: Helvetica, sans-serif;
+                font-size: 12px;
+                border-radius: 3px;
+                box-shadow: 0 1px 0 rgba(0,0,0, 0.1);
+                -webkit-transition: 0.2s linear;
+            }
+
+            #overlay button:hover {  
+                background: #fefefe;
+                background: -webkit-linear-gradient(top,  #fefefe 0%,#f8f8f8 40%,#e9e9e9 100%);
+                border: 1px solid #aaa;
+            }
+      
+            #overlay button:active {  
+                background: #f4f4f4;
+                background: -webkit-linear-gradient(top,  #f4f4f4 0%,#efefef 40%,#dcdcdc 100%);
+                box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+            }  
+
+            #submit {
+                font-weight: bold;
+            }
 
         #hex {
             position: absolute;
@@ -32,7 +96,7 @@
             left: 0;
             right: 0;
             text-align: center;
-            font: bold 50px Menlo, 'Andale Mono', 'Courier New', sans-serif;
+            font: bold 30px Menlo, 'Andale Mono', 'Courier New', sans-serif;
             color: #fff;
             opacity: 0.25;
         }
@@ -59,12 +123,20 @@
 
                 set_lock: function()
                 {
+                    if (PC.locked) return false;
+
                     PC.locked = true;
+                    $('body').removeClass('eyedrop');
+                    $('#overlay').show();
                 },
 
                 remove_lock: function()
                 {
+                    if (! PC.locked) return false;
+
                     PC.locked = false;
+                    $('body').addClass('eyedrop');
+                    $('#overlay').hide();
                 },
 
                 resize: function()
@@ -116,7 +188,11 @@
                 PC.resize();
             });
 
-            $(window).on('click', function(){
+            $(window).on('click', function(e){
+                if ($(e.target).parents('#overlay').length !== 0) {
+                    return false;
+                }
+
                 PC.set_lock();
             });
 
@@ -145,13 +221,27 @@
 
                 PC.set_color();
             });
+
+            $('#reset').on('mouseup', function(){
+                PC.remove_lock();
+            });
         });
     </script>
 </head>
 <body class="eyedrop">
-    <form action="" method="post">
+    <div id="overlay" style="display:none;">
+        <div class="inner">
+        <div class="title">Is this color pretty?</div>
 
-    </form>
+        <form action="" method="post">
+            <input type="hidden" name="rgb" id="rgb" />
+            <input type="hidden" name="rgb" id="base64" />
+
+            <button type="submit" id="submit">Yes, submit to Pretty Colors!</button>
+            <button type="reset" id="reset">No, try again</button>
+        </form>
+        </div>
+    </div>
     <canvas id="canvas" width="1280" height="1280"></canvas>
     <div id="hex"></div>
 </body>
