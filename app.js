@@ -11,6 +11,9 @@ var app = express();
 //     token_secret: process.env.TUMBLR_API_TOKEN_SECRET
 // });
 
+var oauth_token = false;
+var oauth_token_secret = false;
+
 app.configure(function(){
     app.use(express.bodyParser());
 });
@@ -31,28 +34,44 @@ app.get('/request_token', function(req, res) {
         "HMAC-SHA1"
     );
 
-    oa.getOAuthRequestToken(function(error, oauth_token, oauth_token_secret, results){
+    oa.getOAuthRequestToken(function(error, _oauth_token, _oauth_token_secret, results){
         if(error) {
             console.log('error');
             console.log(error);
         } else {
-            console.log('oauth_token: ' + oauth_token);
-            console.log('oauth_token_secret: ' + oauth_token_secret);
+            oauth_token = _oauth_token;
+            oauth_token_secret = _oauth_token_secret;
             res.redirect("http://www.tumblr.com/oauth/authorize?oauth_token=" + oauth_token);
         }
     });
 });
 
 app.get('/callback', function(res, req){
-    if (error) {
-        console.log('error');
-        console.log(error);
-    } else {
-        console.log('oauth_access_token: ' + oauth_access_token);
-        console.log('oauth_access_token_secret: ' + oauth_access_token_secret);
-    }
 
-    res.send(';');
+    var oa = new OAuth(getRequestTokenUrl,
+        "http://www.tumblr.com/oauth/access_token",
+        process.env.TUMBLR_API_CONSUMER_KEY,
+        process.env.TUMBLR_API_CONSUMER_SECRET,
+        "1.0",
+        "http://pretty-colors.herokuapp.com/callback",
+        "HMAC-SHA1"
+    );
+
+    oa.getOAuthAccessToken(
+        oauth_token, 
+        oauth_token_secret,
+        req.param('oauth_verifier'), 
+        function(error, oauth_access_token, oauth_access_token_secret, results2) {
+            if (error) {
+                console.log('error');
+                console.log(error);
+            } else {
+                console.log('oauth_access_token: ' + oauth_access_token);
+                console.log('oauth_access_token_secret: ' + oauth_access_token_secret);
+            }
+
+            res.send('check the logs');
+    });
 });
 
 app.post('/submit', function(req, res){
