@@ -118,6 +118,7 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="jquery.mousewheel.js"></script>
     <script type='text/javascript' src='jquery.tinycolor.js'></script>
+    <script type='text/javascript' src='jquery.throttle-debounce.min.js'></script>
     <script type="text/javascript">
         $(function() {
             PC = {
@@ -222,7 +223,7 @@
                 PC.set_lock();
             });
 
-            $(window).on('mousewheel', function(e, delta){
+            $(window).on('mousewheel', $.throttle(200, function(e, delta){
                 e.preventDefault();
 
                 if (PC.locked) return;
@@ -230,7 +231,7 @@
                 PC.set_l(delta);
 
                 PC.set_color();
-            })
+            }));
 
             $(window).on('keydown', function(e){
                 if (PC.locked) return;
