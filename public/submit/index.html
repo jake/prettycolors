@@ -233,6 +233,8 @@
             })
 
             $(window).on('keydown', function(e){
+                if (PC.locked) return;
+                
                 if (e.keyCode == 40) PC.set_l(1);
                 if (e.keyCode == 38) PC.set_l(-1);
 
