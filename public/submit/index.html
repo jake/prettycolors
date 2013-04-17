@@ -21,6 +21,12 @@
             left: 0;
             margin: 0;
             padding: 0;
+            overflow: hidden;
+            -webkit-transition: background-color 100ms linear;
+            -moz-transition: background-color 100ms linear;
+            -o-transition: background-color 100ms linear;
+            -ms-transition: background-color 100ms linear;
+            transition: background-color 100ms linear;
         }
 
         .eyedrop,
@@ -235,7 +241,7 @@
 
             $(window).on('keydown', function(e){
                 if (PC.locked) return;
-                
+
                 if (e.keyCode == 40) PC.set_l(1);
                 if (e.keyCode == 38) PC.set_l(-1);
 
