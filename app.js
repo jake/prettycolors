@@ -11,6 +11,7 @@ var client = tumblr.createClient({
 });
 
 app.configure(function(){
+    app.use(express.static(__dirname + '/public'));
     app.use(express.bodyParser());
 });
 
