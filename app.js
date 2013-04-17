@@ -1,18 +1,14 @@
 var express = require('express');
 var tumblr = require('tumblr.js');
-var OAuth = require('oauth').OAuth;
 
 var app = express();
 
-// var client = tumblr.createClient({
-//     consumer_key: process.env.TUMBLR_API_CONSUMER_KEY,
-//     consumer_secret: process.env.TUMBLR_API_CONSUMER_SECRET,
-//     token: process.env.TUMBLR_API_TOKEN,
-//     token_secret: process.env.TUMBLR_API_TOKEN_SECRET
-// });
-
-var oauth_token = false;
-var oauth_token_secret = false;
+var client = tumblr.createClient({
+    consumer_key: process.env.TUMBLR_API_CONSUMER_KEY,
+    consumer_secret: process.env.TUMBLR_API_CONSUMER_SECRET,
+    token: process.env.TUMBLR_API_TOKEN,
+    token_secret: process.env.TUMBLR_API_TOKEN_SECRET
+});
 
 app.configure(function(){
     app.use(express.bodyParser());
@@ -21,6 +17,13 @@ app.configure(function(){
 app.configure('development', function(){
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
 });
+
+/*
+var OAuth = require('oauth').OAuth;
+
+var oauth_token = false;
+var oauth_token_secret = false;
+
 
 app.get('/request_token', function(req, res) {    
     var oa = new OAuth("http://www.tumblr.com/oauth/request_token",
@@ -72,6 +75,7 @@ app.get('/callback', function(req, res){
             res.send('check the logs');
     });
 });
+*/
 
 app.post('/submit', function(req, res){
     console.log(req.body);
