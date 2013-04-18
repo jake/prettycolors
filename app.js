@@ -79,7 +79,7 @@ app.get('/callback', function(req, res){
 */
 
 app.post('/submit', function(req, res){
-    client.photo('testpubgroup5', {
+    client.photo('prettycolors', {
         state: 'queue',
         tags: 'prettycolors',
         data64: req.body.base64,
