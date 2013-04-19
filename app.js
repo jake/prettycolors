@@ -51,6 +51,7 @@ var tumblr_client = tumblr.createClient({
 });
 
 var mysql_connection = mysql.createConnection(process.env.CLEARDB_DATABASE_URL);
+mysql_connection.connect();
 handle_disconnect(mysql_connection);
 
 app.configure(function(){
@@ -103,7 +104,7 @@ app.post('/submit', function(req, res){
             submitted_ip: get_client_ip(req),
         };
 
-        try {
+        // try {
             mysql_connection.query('INSERT INTO colors SET ?', mysql_params, function(err, data){
                 if (err) console.log(err);
                 console.log(data);
@@ -111,9 +112,9 @@ app.post('/submit', function(req, res){
                 res.redirect('http://prettycolors.tumblr.com/');
                 res.end();
             });
-        } catch (err) {
-            console.log('mysql try/catch: ' + err);
-        }
+        // } catch (err) {
+        //     console.log('mysql try/catch: ' + err);
+        // }
     });
 });
 
