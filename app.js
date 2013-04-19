@@ -37,7 +37,7 @@ function handle_disconnect(connection) {
     
         console.log('Re-connecting lost connection: ' + err.stack);
     
-        connection = mysql_connection.createConnection(connection.config);
+        connection = mysql.createConnection(process.env.CLEARDB_DATABASE_URL);
         handle_disconnect(connection);
         connection.connect();
     });
