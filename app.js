@@ -1,8 +1,12 @@
 var express = require('express');
-var tumblr  = require('./lib/tumblr.js');
 var mysql   = require('mysql');
+var tumblr  = require('./lib/tumblr.js');
+var emitter = require('./lib/emitter');
+var stream = require('./lib/stream');
 
 var app = express();
+
+stream.start();
 
 function get_client_ip(req) {
     var ip_address = false;
@@ -39,6 +43,30 @@ app.configure('development', function(){
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
 });
 
+app.get('/stream', function(req, res){
+    res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive'
+    });
+    res.write('\n');
+
+    var stream_name = new Date().getTime();
+
+    stream.register(stream_name, res);
+
+    req.on('close', function() {
+        console.log('Unregistering stream %j via close', stream_name);
+        stream.unregister(stream_name);
+    });
+
+    req.on('timeout', function() {
+        console.log('Unregistering stream %j via timeout', stream_name);
+        stream.unregister(stream_name);
+    });
+
+});
+
 app.post('/submit', function(req, res){
     var mysql_params = {
         hex: req.body.hex.replace('#', ''),
@@ -57,6 +85,8 @@ app.post('/submit', function(req, res){
         }, function(err, data){
             if (err) console.log(err);
             console.log(data);
+
+            emitter.emit('color', req.body.hex);
 
             res.redirect('http://prettycolors.tumblr.com/');
             res.end();
