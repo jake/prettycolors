@@ -99,22 +99,18 @@ app.post('/submit', function(req, res){
         if (err) console.log(err);
         console.log(data);
 
+        res.redirect('http://prettycolors.tumblr.com/');
+        res.end();
+
         var mysql_params = {
             hex: req.body.hex.replace('#', ''),
             submitted_ip: get_client_ip(req),
         };
 
-        // try {
-            mysql_connection.query('INSERT INTO colors SET ?', mysql_params, function(err, data){
-                if (err) console.log(err);
-                console.log(data);
-
-                res.redirect('http://prettycolors.tumblr.com/');
-                res.end();
-            });
-        // } catch (err) {
-        //     console.log('mysql try/catch: ' + err);
-        // }
+        mysql_connection.query('INSERT INTO colors SET ?', mysql_params, function(err, data){
+            if (err) console.log(err);
+            console.log(data);
+        });
     });
 });
 
