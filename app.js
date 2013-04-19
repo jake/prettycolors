@@ -87,25 +87,25 @@ app.get('/stream', function(req, res){
 });
 
 app.post('/submit', function(req, res){
-    var mysql_params = {
-        hex: req.body.hex.replace('#', ''),
-        submitted_ip: get_client_ip(req),
-    };
+    emitter.emit('color', req.body.hex);
 
-    mysql_connection.query('INSERT INTO colors SET ?', mysql_params, function(err, data){
+    tumblr_client.photo('prettycolors', {
+        state: 'queue',
+        tags: 'prettycolors',
+        data64: req.body.base64,
+        caption: req.body.hex,
+    }, function(err, data){
         if (err) console.log(err);
         console.log(data);
 
-        tumblr_client.photo('prettycolors', {
-            state: 'queue',
-            tags: 'prettycolors',
-            data64: req.body.base64,
-            caption: req.body.hex,
-        }, function(err, data){
+        var mysql_params = {
+            hex: req.body.hex.replace('#', ''),
+            submitted_ip: get_client_ip(req),
+        };
+
+        mysql_connection.query('INSERT INTO colors SET ?', mysql_params, function(err, data){
             if (err) console.log(err);
             console.log(data);
-
-            emitter.emit('color', req.body.hex);
 
             res.redirect('http://prettycolors.tumblr.com/');
             res.end();
