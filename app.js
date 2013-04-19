@@ -23,7 +23,25 @@ function get_client_ip(req) {
     }
 
     return ip_address;
-};
+}
+
+function handle_disconnect(connection) {
+    connection.on('error', function(err) {
+        if (! err.fatal) {
+            return;
+        }
+    
+        if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
+            throw err;
+        }
+    
+        console.log('Re-connecting lost connection: ' + err.stack);
+    
+        connection = mysql_connection.createConnection(connection.config);
+        handle_disconnect(connection);
+        connection.connect();
+    });
+}
 
 var tumblr_client = tumblr.createClient({
     consumer_key: process.env.TUMBLR_API_CONSUMER_KEY,
@@ -33,6 +51,7 @@ var tumblr_client = tumblr.createClient({
 });
 
 var mysql_connection = mysql.createConnection(process.env.CLEARDB_DATABASE_URL);
+handle_disconnect(mysql_connection);
 
 app.configure(function(){
     app.use(express.static(__dirname + '/public'));
