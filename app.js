@@ -103,13 +103,17 @@ app.post('/submit', function(req, res){
             submitted_ip: get_client_ip(req),
         };
 
-        mysql_connection.query('INSERT INTO colors SET ?', mysql_params, function(err, data){
-            if (err) console.log(err);
-            console.log(data);
+        try {
+            mysql_connection.query('INSERT INTO colors SET ?', mysql_params, function(err, data){
+                if (err) console.log(err);
+                console.log(data);
 
-            res.redirect('http://prettycolors.tumblr.com/');
-            res.end();
-        });
+                res.redirect('http://prettycolors.tumblr.com/');
+                res.end();
+            });
+        } catch (err) {
+            console.log('mysql try/catch: ' + err);
+        }
     });
 });
 
