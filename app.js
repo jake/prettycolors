@@ -25,34 +25,12 @@ function get_client_ip(req) {
     return ip_address;
 }
 
-function handle_disconnect(connection) {
-    connection.on('error', function(err) {
-        if (! err.fatal) {
-            return;
-        }
-    
-        if (err.code !== 'PROTOCOL_CONNECTION_LOST') {
-            throw err;
-        }
-    
-        console.log('Re-connecting lost connection: ' + err.stack);
-    
-        connection = mysql.createConnection(process.env.CLEARDB_DATABASE_URL);
-        handle_disconnect(connection);
-        connection.connect();
-    });
-}
-
 var tumblr_client = tumblr.createClient({
     consumer_key: process.env.TUMBLR_API_CONSUMER_KEY,
     consumer_secret: process.env.TUMBLR_API_CONSUMER_SECRET,
     token: process.env.TUMBLR_API_TOKEN,
     token_secret: process.env.TUMBLR_API_TOKEN_SECRET
 });
-
-var mysql_connection = mysql.createConnection(process.env.CLEARDB_DATABASE_URL);
-mysql_connection.connect();
-handle_disconnect(mysql_connection);
 
 app.configure(function(){
     app.use(express.static(__dirname + '/public'));
@@ -99,17 +77,21 @@ app.post('/submit', function(req, res){
         if (err) console.log(err);
         console.log(data);
 
-        res.redirect('http://prettycolors.tumblr.com/');
-        res.end();
-
         var mysql_params = {
             hex: req.body.hex.replace('#', ''),
             submitted_ip: get_client_ip(req),
         };
 
+        var mysql_connection = mysql.createConnection(process.env.CLEARDB_DATABASE_URL);
+
         mysql_connection.query('INSERT INTO colors SET ?', mysql_params, function(err, data){
             if (err) console.log(err);
             console.log(data);
+
+            mysql_connection.destroy();
+
+            res.redirect('http://prettycolors.tumblr.com/');
+            res.end();
         });
     });
 });
