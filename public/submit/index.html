@@ -63,7 +63,7 @@
             }
 
             #overlay .title {
-                font: normal 30px "Helvetica Neue";
+                font: normal 30px "Helvetica Neue", Helvetica, sans-serif;
                 color: rgba(13,13,13, 0.8);
                 padding: 0 25px 25px 25px;
             }
@@ -74,7 +74,7 @@
                 border: 1px solid #aaa;
                 padding: 5px 14px;
                 color: #444;
-                font-family: Helvetica, sans-serif;
+                font-family:  "Helvetica Neue", Helvetica, sans-serif;
                 font-size: 12px;
                 border-radius: 3px;
                 box-shadow: 0 1px 0 rgba(0,0,0, 0.1);
@@ -99,11 +99,11 @@
 
         #hex {
             position: absolute;
-            bottom: 50px;
+            bottom: 60px;
             left: 0;
             right: 0;
             text-align: center;
-            font: bold 30px Menlo, 'Andale Mono', 'Courier New', sans-serif;
+            font: bold 30px Menlo, 'Andale Mono', 'Courier New', monospace;
             color: #fff;
             opacity: 0.25;
             -webkit-transition: color 100ms linear;
@@ -125,6 +125,26 @@
             left: 0;
             background: url('colorwheel.gif') center no-repeat transparent;
             background-size: cover;
+        }
+
+        #help {
+            position: absolute;
+            bottom: 25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font: normal 12px Menlo, 'Andale Mono', 'Courier New', monospace;
+            color: #fff;
+            opacity: 0.15;
+            -webkit-transition: color 100ms linear;
+            -moz-transition: color 100ms linear;
+            -o-transition: color 100ms linear;
+            -ms-transition: color 100ms linear;
+            transition: color 100ms linear;
+        }
+
+        #help.inverted {
+            color: #000;
         }
     </style>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -200,9 +220,9 @@
                     $('#hex').html('#' + t.toHex());
 
                     if (PC.l > 30) {
-                        $('#hex').addClass('inverted');
+                        $('#hex,#help').addClass('inverted');
                     } else {
-                        $('#hex').removeClass('inverted');
+                        $('#hex,#help').removeClass('inverted');
                     }
                 },
 
@@ -290,5 +310,6 @@
     <canvas id="canvas" width="1280" height="1280"></canvas>
     <div id="hex"></div>
     <div id="loader" style="display:none;"></div>
+    <div id="help">scroll to adjust brightness</div>
 </body>
 </html>
