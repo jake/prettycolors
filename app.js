@@ -77,7 +77,7 @@ app.get('/history', function(req, res){
 
     mysql_connection.query('SELECT hex FROM colors ORDER BY submitted_on DESC', function(err, data){
         if (err) console.log(err);
-        console.log(data);
+        console.log(data.length);
 
         mysql_connection.destroy();
 
@@ -86,8 +86,6 @@ app.get('/history', function(req, res){
         for (var i=0; i < data.length; i++) {
             hexes.push('#' + data[i].hex);
         }
-
-        console.log(hexes);
 
         res.render('history', {
             hexes: JSON.stringify(hexes),
