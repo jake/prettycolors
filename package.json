@@ -7,6 +7,7 @@
         "request": "2.x"
         ,"express": "3.0.x"
         ,"mysql": "2.0.0-alpha7"
+        ,"ejs": "0.8.x"
     },
     "engines": {
         "node": "0.8.x"

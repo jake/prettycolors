@@ -1,8 +1,9 @@
 var express = require('express');
+var ejs     = require('ejs');
 var mysql   = require('mysql');
 var tumblr  = require('./lib/tumblr.js');
 var emitter = require('./lib/emitter');
-var stream = require('./lib/stream');
+var stream  = require('./lib/stream');
 
 var app = express();
 
@@ -37,6 +38,11 @@ app.configure(function(){
     app.use(express.bodyParser());
 });
 
+app.set('view engine', 'ejs');
+app.set('view options', {
+    layout: false
+});
+
 app.configure('development', function(){
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
 });
@@ -62,6 +68,30 @@ app.get('/stream', function(req, res){
     req.on('timeout', function() {
         console.log('Unregistering stream %j via timeout', stream_name);
         stream.unregister(stream_name);
+    });
+
+});
+
+app.get('/history', function(req, res){
+    var mysql_connection = mysql.createConnection(process.env.CLEARDB_DATABASE_URL);
+
+    mysql_connection.query('SELECT hex FROM colors ORDER BY submitted_on DESC', function(err, data){
+        if (err) console.log(err);
+        console.log(data);
+
+        mysql_connection.destroy();
+
+        var hexes = [];
+
+        for (var i=0; i < data.length; i++) {
+            hexes.push('#' + data[i].hex);
+        }
+
+        console.log(hexes);
+
+        res.render('history', {
+            hexes: JSON.stringify(hexes),
+        });
     });
 
 });

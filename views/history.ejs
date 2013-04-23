@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pretty Colors</title>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="http://static.tumblr.com/v3kbwui/Jysmlfh5d/prettycolors_favicon.png"/>
+    <style type="text/css">
+        html, body, div, span, p, a, strong, b, i, form, label, canvas {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+
+        body {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            -webkit-transition: background-color 50ms linear;
+            -moz-transition: background-color 50ms linear;
+            -o-transition: background-color 50ms linear;
+            -ms-transition: background-color 50ms linear;
+            transition: background-color 50ms linear;
+        }
+
+        #hex {
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font: bold 30px Menlo, 'Andale Mono', 'Courier New', sans-serif;
+            color: #fff;
+            opacity: 0.25;
+            -webkit-transition: color 50ms linear;
+            -moz-transition: color 50ms linear;
+            -o-transition: color 50ms linear;
+            -ms-transition: color 50ms linear;
+            transition: color 50ms linear;
+        }
+
+        #progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            width: ;
+            background: #fff;
+            opacity: 0.5;
+            -webkit-transition: width 50ms linear;
+            -moz-transition: width 50ms linear;
+            -o-transition: width 50ms linear;
+            -ms-transition: width 50ms linear;
+            transition: width 50ms linear;
+        }
+    </style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var hexes = <%- hexes %>;
+
+            var total = hexes.length;
+            var i = 0;
+
+            var timeout = window.setInterval(function(){
+                if (! hexes[i]) {
+                    $('#hex').html('END');
+                    window.clearInterval(timeout);
+                    return false;
+                }
+
+                $('body').css('background-color', hexes[i]);
+                $('#hex').html(hexes[i]);
+
+                console.log(i / total);
+
+                $('#progress').css('width', (i / total) * 100 + '%');
+
+                i++;
+            }, 50);
+        });
+    </script>
+</head>
+<body>
+    <div id="hex"></div>
+    <div id="progress" style="width:0%;"></div>
+</body>
+</html>
