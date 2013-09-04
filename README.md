@@ -1,0 +1,3 @@
+prettycolors
+============
+Guaranteed pretty colors.
